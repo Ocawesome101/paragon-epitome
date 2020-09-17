@@ -29,25 +29,44 @@ log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _I
 
 -- some sort of basic FS utility api for things the io lib doesn't have --
 
-log(34, "src/fs.lua")
+log("src/fs.lua")
 
 do
   local vfs = k.vfs
 
   _G.fs = {}
+
+  local funcs = {
+    'list',
+    'makeDirectory',
+    'isDirectory',
+    'remove',
+    'exists',
+    'spaceUsed',
+    'spaceTotal',
+    'isReadOnly'
+  }
   
-  local function wrap(f)
+  local function wrap(f, b)
     return function(p)
-      checkArg(1, p, "string")
-      local node, path = vfs.resolve(k)
+      checkArg(1, p, "string", b and "nil")
+      p = p or "/"
+      local node, path = vfs.resolve(p)
       if not node then
         return nil, err
       end
+      return node[f](node, path)
     end
+  end
+
+  for k, v in pairs(funcs) do
+    fs[v] = wrap(v, k >= #funcs - 3)
   end
 end
 
 -- package library --
+
+log("src/package.lua")
 
 do
   local package = {}
@@ -160,6 +179,6 @@ end
 
 -- load login --
 
-log(34, "src/login.lua")
+log("src/login.lua")
 while true do coroutine.yield() end
 

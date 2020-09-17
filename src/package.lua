@@ -1,5 +1,7 @@
 -- package library --
 
+log("src/package.lua")
+
 do
   local package = {}
   local loaded = {
