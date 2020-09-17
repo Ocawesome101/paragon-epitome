@@ -38,7 +38,7 @@ function rm(d)
 end
 
 function mkdir(d)
-  return os.execute("mkdir " .. d)
+  return os.execute("mkdir -p " .. d)
 end
 
 function log(...)

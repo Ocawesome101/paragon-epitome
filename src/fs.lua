@@ -1,6 +1,6 @@
 -- some sort of basic FS utility api for things the io lib doesn't have --
 
-log("")
+log(34, "src/fs.lua")
 
 do
   local vfs = k.vfs

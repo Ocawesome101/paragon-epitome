@@ -52,4 +52,4 @@ end
 rm("tmp")
 mkdir("tmp")
 rm("build")
-mkdir("build")
+mkdir("build/sbin")
