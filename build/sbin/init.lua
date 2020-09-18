@@ -9,8 +9,10 @@ _G._IINFO = {
 -- init logger --
 
 log("INIT: src/logger.lua")
+local bgpu, bscr
 if k.io.gpu then
   local gpu = k.io.gpu
+  bgpu, bscr = gpu.address, gpu.getScreen()
   local vts = k.vt.new(component.proxy(gpu.address))
   io.input(vts)
   io.output(vts)
@@ -23,7 +25,8 @@ if k.io.gpu then
     end
     return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
   end
-  --k.io.hide()
+  k.io.hide()
+  
 end
 
 log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _IINFO.name, _IINFO.version))
@@ -212,7 +215,7 @@ local ok, err = loadfile("/sbin/getty.lua")
 if not ok then
   log(31, "failed: ".. err)
 else
-  require("process").spawn(ok, "[getty]")
+  require("process").spawn(function()ok(bgpu, bscr)end, "[getty]")
 end
 
 while true do coroutine.yield() end
