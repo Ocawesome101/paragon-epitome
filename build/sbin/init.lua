@@ -23,6 +23,7 @@ if k.io.gpu then
     end
     return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
   end
+  --k.io.hide()
 end
 
 log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _IINFO.name, _IINFO.version))
@@ -69,7 +70,8 @@ end
 log("src/package.lua")
 
 do
-  local package = {}
+  _G.package = {}
+  local loading = {}
   local loaded = {
     _G = _G,
     os = os,
@@ -79,8 +81,14 @@ do
     bit32 = bit32,
     string = string,
     package = package,
+    process = process,
+    computer = computer,
+    component = component,
     coroutine = coroutine
   }
+  _G.process = nil
+  _G.computer = nil
+  _G.component = nil
   package.loaded = loaded
 
   function package.searchpath(name, path, sep, rep)
@@ -176,9 +184,36 @@ do
   end
 end
 
+-- kernel-provided APIs, userspace edition --
 
--- load login --
+log("src/klapis.lua")
+do
+  local k = k
+  _G.k = nil
+  package.loaded.sha3 = k.sha3
+  package.loaded.sha2 = k.sha2
+  package.loaded.ec25519 = k.ec25519
+  package.loaded.uuid = k.uuid
+  package.loaded.minitel = k.drv.net.minitel
+  package.loaded.gert = k.drv.net.gert
+  package.loaded.event = k.evt
+  package.loaded.vt100 = k.tty
+end
 
-log("src/login.lua")
+
+
+-- load getty --
+
+log("src/getty.lua")
+
+log("starting getty")
+local ok, err = loadfile("/sbin/getty.lua")
+
+if not ok then
+  log(31, "failed: ".. err)
+else
+  require("process").spawn(ok, "[getty]")
+end
+
 while true do coroutine.yield() end
 

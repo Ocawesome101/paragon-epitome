@@ -8,7 +8,7 @@ local ok, err = loadfile("/sbin/getty.lua")
 if not ok then
   log(31, "failed: ".. err)
 else
-  process.spawn(ok, "[getty]")
+  require("process").spawn(function()ok(bgpu, bscr)end, "[getty]")
 end
 
 while true do coroutine.yield() end

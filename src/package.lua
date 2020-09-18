@@ -3,7 +3,8 @@
 log("src/package.lua")
 
 do
-  local package = {}
+  _G.package = {}
+  local loading = {}
   local loaded = {
     _G = _G,
     os = os,
@@ -13,8 +14,14 @@ do
     bit32 = bit32,
     string = string,
     package = package,
+    process = process,
+    computer = computer,
+    component = component,
     coroutine = coroutine
   }
+  _G.process = nil
+  _G.computer = nil
+  _G.component = nil
   package.loaded = loaded
 
   function package.searchpath(name, path, sep, rep)
@@ -109,3 +116,5 @@ do
     end
   end
 end
+
+--#include "src/klapis.lua"
