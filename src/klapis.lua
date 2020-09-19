@@ -13,5 +13,6 @@ do
   package.loaded.gert = k.drv.net.gert
   package.loaded.event = k.evt
   package.loaded.vt100 = k.vt
+  package.loaded.hostname = k.hostname
   io.write("Done.\n")
 end
