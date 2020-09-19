@@ -39,6 +39,7 @@ do
   local vfs = k.vfs
 
   _G.fs = {}
+  io.write("\27[92m*\27[97m Setting up filesystem functions....")
 
   local funcs = {
     'list',
@@ -66,6 +67,8 @@ do
   for k, v in pairs(funcs) do
     fs[v] = wrap(v, k >= #funcs - 3)
   end
+
+  io.write("Done.\n")
 end
 
 -- package library --
@@ -73,6 +76,7 @@ end
 log("src/package.lua")
 
 do
+  io.write("\27[92m*\27[97m Setting up package API...")
   _G.package = {}
   local loading = {}
   local loaded = {
@@ -89,6 +93,7 @@ do
     component = component,
     coroutine = coroutine
   }
+  io.write("Uncluttering _G...")
   _G.process = nil
   _G.computer = nil
   _G.component = nil
@@ -125,6 +130,7 @@ do
     end
   end
 
+  io.write("Library protection...")
   function package.protect(tbl, name)
     local new = setmetatable(tbl, {
       __newindex = function() error((name or "lib") .. " is read-only") end,
@@ -149,7 +155,6 @@ do
         setmetatable(lib, nil)
         setmetatable(lib.internal or {}, nil)
         dofile(file)
-        log("INFO", "DELAYLOAD "..file..": "..tostring(key))
         return tbl[key]
       end
     }
@@ -159,6 +164,7 @@ do
     setmetatable(lib, mt)
   end
 
+  io.write("require()...")
   function _G.require(module)
     checkArg(1, module, "string")
     if loaded[module] ~= nil then
@@ -185,12 +191,15 @@ do
       error("already loading: " .. module .. "\n" .. debug.traceback(), 2)
     end
   end
+
+  io.write("Done.\n")
 end
 
 -- kernel-provided APIs, userspace edition --
 
 log("src/klapis.lua")
 do
+  io.write("\27[92m*\27[97m Adding kernel APIs....")
   local k = k
   _G.k = nil
   package.loaded.sha3 = k.sha3
@@ -201,6 +210,7 @@ do
   package.loaded.gert = k.drv.net.gert
   package.loaded.event = k.evt
   package.loaded.vt100 = k.tty
+  io.write("Done.\n")
 end
 
 
@@ -209,7 +219,7 @@ end
 
 log("src/getty.lua")
 
-log("starting getty")
+log("Starting getty")
 local ok, err = loadfile("/sbin/getty.lua")
 
 if not ok then

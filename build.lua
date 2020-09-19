@@ -37,6 +37,10 @@ function rm(d)
   return os.execute("rm -rv "..d)
 end
 
+function cp(f,d)
+  return os.execute(table.concat({"cp -v", f, d}, " "))
+end
+
 function mkdir(d)
   return os.execute("mkdir -p " .. d)
 end

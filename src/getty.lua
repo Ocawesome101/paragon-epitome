@@ -2,7 +2,7 @@
 
 log("src/getty.lua")
 
-log("starting getty")
+log("Starting getty")
 local ok, err = loadfile("/sbin/getty.lua")
 
 if not ok then

@@ -2,6 +2,7 @@
 
 log("src/klapis.lua")
 do
+  io.write("\27[92m*\27[97m Adding kernel APIs....")
   local k = k
   _G.k = nil
   package.loaded.sha3 = k.sha3
@@ -12,4 +13,5 @@ do
   package.loaded.gert = k.drv.net.gert
   package.loaded.event = k.evt
   package.loaded.vt100 = k.tty
+  io.write("Done.\n")
 end

@@ -6,6 +6,7 @@ do
   local vfs = k.vfs
 
   _G.fs = {}
+  io.write("\27[92m*\27[97m Setting up filesystem functions....")
 
   local funcs = {
     'list',
@@ -33,4 +34,6 @@ do
   for k, v in pairs(funcs) do
     fs[v] = wrap(v, k >= #funcs - 3)
   end
+
+  io.write("Done.\n")
 end

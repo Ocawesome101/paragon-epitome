@@ -3,6 +3,7 @@
 log("src/package.lua")
 
 do
+  io.write("\27[92m*\27[97m Setting up package API...")
   _G.package = {}
   local loading = {}
   local loaded = {
@@ -19,6 +20,7 @@ do
     component = component,
     coroutine = coroutine
   }
+  io.write("Uncluttering _G...")
   _G.process = nil
   _G.computer = nil
   _G.component = nil
@@ -55,6 +57,7 @@ do
     end
   end
 
+  io.write("Library protection...")
   function package.protect(tbl, name)
     local new = setmetatable(tbl, {
       __newindex = function() error((name or "lib") .. " is read-only") end,
@@ -79,7 +82,6 @@ do
         setmetatable(lib, nil)
         setmetatable(lib.internal or {}, nil)
         dofile(file)
-        log("INFO", "DELAYLOAD "..file..": "..tostring(key))
         return tbl[key]
       end
     }
@@ -89,6 +91,7 @@ do
     setmetatable(lib, mt)
   end
 
+  io.write("require()...")
   function _G.require(module)
     checkArg(1, module, "string")
     if loaded[module] ~= nil then
@@ -115,6 +118,8 @@ do
       error("already loading: " .. module .. "\n" .. debug.traceback(), 2)
     end
   end
+
+  io.write("Done.\n")
 end
 
 --#include "src/klapis.lua"
