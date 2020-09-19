@@ -38,7 +38,7 @@ function rm(d)
 end
 
 function cp(f,d)
-  return os.execute(table.concat({"cp -v", f, d}, " "))
+  return os.execute(table.concat({"cp -rv", f, d}, " "))
 end
 
 function mkdir(d)
