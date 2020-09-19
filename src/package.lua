@@ -26,6 +26,8 @@ do
   _G.component = nil
   package.loaded = loaded
 
+  package.path = "/lib/?.lua;/lib/lib?.lua;/lib/?/init.lua"
+
   function package.searchpath(name, path, sep, rep)
     checkArg(1, name, "string")
     checkArg(2, path, "string")

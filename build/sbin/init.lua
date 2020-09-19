@@ -26,7 +26,6 @@ if k.io.gpu then
     return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
   end
   k.io.hide()
-  
 end
 
 log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _IINFO.name, _IINFO.version))
@@ -98,6 +97,8 @@ do
   _G.computer = nil
   _G.component = nil
   package.loaded = loaded
+
+  package.path = "/lib/?.lua;/lib/lib?.lua;/lib/?/init.lua"
 
   function package.searchpath(name, path, sep, rep)
     checkArg(1, name, "string")
@@ -209,7 +210,7 @@ do
   package.loaded.minitel = k.drv.net.minitel
   package.loaded.gert = k.drv.net.gert
   package.loaded.event = k.evt
-  package.loaded.vt100 = k.tty
+  package.loaded.vt100 = k.vt
   io.write("Done.\n")
 end
 
@@ -228,5 +229,6 @@ else
   require("process").spawn(function()ok(bgpu, bscr)end, "[getty]")
 end
 
+require("event").push("init")
 while true do coroutine.yield() end
 

@@ -11,4 +11,5 @@ else
   require("process").spawn(function()ok(bgpu, bscr)end, "[getty]")
 end
 
+require("event").push("init")
 while true do coroutine.yield() end

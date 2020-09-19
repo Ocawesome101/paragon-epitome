@@ -12,6 +12,6 @@ do
   package.loaded.minitel = k.drv.net.minitel
   package.loaded.gert = k.drv.net.gert
   package.loaded.event = k.evt
-  package.loaded.vt100 = k.tty
+  package.loaded.vt100 = k.vt
   io.write("Done.\n")
 end
