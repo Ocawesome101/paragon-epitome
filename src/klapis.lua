@@ -15,5 +15,6 @@ do
   package.loaded.vt100 = k.vt
   package.loaded.hostname = k.hostname
   package.loaded.users = package.protect(k.security.users)
+  package.loaded.buffer = k.io.buffer
   io.write("Done.\n")
 end

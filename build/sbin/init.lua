@@ -70,6 +70,35 @@ do
   io.write("Done.\n")
 end
 
+-- prime the users API with data from /etc/passwd --
+
+log("src/passwd.lua")
+
+do
+  log("Loading data from /etc/passwd")
+  -- uid:password:username:home:shell
+  local format = "(%d+):(%g+):(%g+):(%g+):(%g+)"
+  local handle, err = io.open("/etc/passwd", "r")
+  if not handle then
+    log(31, "failed: " .. err)
+    while true do coroutine.yield() end
+  end
+  local data = handle:read("a")
+  handle:close()
+  local pwdata = {}
+  for line in data:gmatch("[^\n]+") do
+    local uid, hash, name, home, shell = line:match(format)
+    pwdata[tonumber(uid)] = {
+      hash = hash,
+      name = name,
+      home = home,
+      shell = shell
+    }
+  end
+  log("Priming users API")
+  k.security.users.prime(pwdata)
+end
+
 -- package library --
 
 log("src/package.lua")
@@ -213,9 +242,41 @@ do
   package.loaded.vt100 = k.vt
   package.loaded.hostname = k.hostname
   package.loaded.users = package.protect(k.security.users)
+  package.loaded.buffer = k.io.buffer
   io.write("Done.\n")
 end
 
+
+-- os API --
+
+do
+  local process = require("process")
+  local computer = require("computer")
+
+  function os.getenv(k)
+    checkArg(1, k, "string", "number")
+    return process.info().env[k]
+  end
+
+  function os.setenv(k, v)
+    checkArg(1, k, "string", "number")
+    checkArg(2, v, "string", "number", "nil")
+    process.info().env[k] = v
+    return true
+  end
+
+  -- XXX: Accuracy depends on the scheduler timeout.
+  -- XXX: Shorter intervals (minimum 0.05s) will produce greater accuracy but
+  -- XXX: will cause the computer to consume more energy.
+  function os.sleep(n)
+    checkArg(1, n, "number")
+    local max = computer.uptime() + n
+    repeat
+      coroutine.yield()
+    until computer.uptime() >= max
+    return true
+  end
+end
 
 
 -- load getty --
@@ -228,7 +289,7 @@ local ok, err = loadfile("/sbin/getty.lua")
 if not ok then
   log(31, "failed: ".. err)
 else
-  require("process").spawn(function()ok(bgpu, bscr)end, "[getty]")
+  require("process").spawn(function()local s, r = pcall(ok, bgpu, bscr) if not s and r then log(31, "failed: "..r) end end, "[getty]")
 end
 
 require("event").push("init")
