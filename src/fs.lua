@@ -5,7 +5,7 @@ log("src/fs.lua")
 do
   local vfs = k.vfs
 
-  _G.fs = {}
+  local fs = {}
   io.write("\27[92m*\27[97m Setting up filesystem functions....")
 
   local funcs = {
@@ -34,6 +34,11 @@ do
   for k, v in pairs(funcs) do
     fs[v] = wrap(v, k >= #funcs - 3)
   end
+
+  fs.stat = vfs.stat
+  fs.mount = vfs.mount
+  fs.umount = vfs.umount
+  package.loaded.filesystem = fs
 
   io.write("Done.\n")
 end
