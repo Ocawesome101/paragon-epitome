@@ -243,6 +243,9 @@ do
   package.loaded.hostname = k.hostname
   package.loaded.users = package.protect(k.security.users)
   package.loaded.buffer = k.io.buffer
+  package.loaded.pipe = {
+    create = k.io.pipe
+  }
   io.write("Done.\n")
 end
 
