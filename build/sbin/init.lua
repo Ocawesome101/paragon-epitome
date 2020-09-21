@@ -25,7 +25,6 @@ if k.io.gpu then
     end
     return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
   end
-  k.io.hide()
 end
 
 log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _IINFO.name, _IINFO.version))
@@ -37,7 +36,7 @@ log("src/fs.lua")
 do
   local vfs = k.vfs
 
-  local fs = {}
+  _G.fs = {}
   io.write("\27[92m*\27[97m Setting up filesystem functions....")
 
   local funcs = {
@@ -70,7 +69,6 @@ do
   fs.stat = vfs.stat
   fs.mount = vfs.mount
   fs.umount = vfs.umount
-  package.loaded.filesystem = fs
 
   io.write("Done.\n")
 end
@@ -124,9 +122,11 @@ do
     process = process,
     computer = computer,
     component = component,
-    coroutine = coroutine
+    coroutine = coroutine,
+    filesystem = fs
   }
   io.write("Uncluttering _G...")
+  _G.fs = nil
   _G.process = nil
   _G.computer = nil
   _G.component = nil
@@ -271,6 +271,10 @@ do
     checkArg(2, v, "string", "number", "nil")
     process.info().env[k] = v
     return true
+  end
+
+  function os.exit(c)
+    process.signal(process.current(), process.signals.KILL)
   end
 
   -- XXX: Accuracy depends on the scheduler timeout.

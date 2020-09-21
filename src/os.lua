@@ -16,6 +16,10 @@ do
     return true
   end
 
+  function os.exit(c)
+    process.signal(process.current(), process.signals.KILL)
+  end
+
   -- XXX: Accuracy depends on the scheduler timeout.
   -- XXX: Shorter intervals (minimum 0.05s) will produce greater accuracy but
   -- XXX: will cause the computer to consume more energy.

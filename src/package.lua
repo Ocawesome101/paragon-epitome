@@ -18,9 +18,11 @@ do
     process = process,
     computer = computer,
     component = component,
-    coroutine = coroutine
+    coroutine = coroutine,
+    filesystem = fs
   }
   io.write("Uncluttering _G...")
+  _G.fs = nil
   _G.process = nil
   _G.computer = nil
   _G.component = nil
