@@ -41,7 +41,7 @@ do
     name = name:gsub(sep, rep)
     for search in path:gmatch("[^;]+") do
       search = search:gsub("%?", name)
-      if fs.exists(search) then
+      if require("filesystem").exists(search) then
         return search
       end
       searched[#searched + 1] = search

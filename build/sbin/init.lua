@@ -25,7 +25,7 @@ if k.io.gpu then
     end
     return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
   end
-  --k.io.hide()
+  k.io.hide()
 end
 
 log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _IINFO.name, _IINFO.version))
@@ -146,7 +146,7 @@ do
     name = name:gsub(sep, rep)
     for search in path:gmatch("[^;]+") do
       search = search:gsub("%?", name)
-      if fs.exists(search) then
+      if require("filesystem").exists(search) then
         return search
       end
       searched[#searched + 1] = search
