@@ -21,7 +21,8 @@ do
   
   local function wrap(f, b)
     return function(p)
-      checkArg(1, p, "string", b and "nil")
+      checkArg(1, p, "string", "nil")
+      assert((not b) and p, "bad argument #1 (string expected, got nil)")
       p = p or "/"
       local node, path = vfs.resolve(p)
       if not node then
