@@ -17,7 +17,7 @@ do
   end
 
   function os.exit(c)
-    process.signal(process.current(), process.signals.KILL)
+    process.signal(process.current(), process.signals.SIGKILL)
   end
 
   -- XXX: Accuracy depends on the scheduler timeout.
