@@ -18,6 +18,7 @@ do
 
   function os.exit(c)
     process.signal(process.current(), process.signals.SIGKILL)
+    coroutine.yield() -- allow signal processing
   end
 
   -- XXX: Accuracy depends on the scheduler timeout.
