@@ -8,37 +8,38 @@ do
   _G.fs = {}
   io.write("\27[92m*\27[97m Setting up filesystem functions....")
 
-  local funcs = {
-    'list',
-    'makeDirectory',
-    'isDirectory',
-    'remove',
-    'exists',
-    'spaceUsed',
-    'spaceTotal',
-    'isReadOnly'
-  }
-  
-  local function wrap(f, b)
-    return function(p)
-      checkArg(1, p, "string", "nil")
-      assert((not b) and p, "bad argument #1 (string expected, got nil)")
-      p = p or "/"
-      local node, path = vfs.resolve(p)
-      if not node then
-        return nil, err
-      end
-      return node[f](node, path)
-    end
-  end
-
-  for k, v in pairs(funcs) do
-    fs[v] = wrap(v, k >= #funcs - 3)
-  end
-
   fs.stat = vfs.stat
   fs.mount = vfs.mount
+  fs.mounts = vfs.mounts
   fs.umount = vfs.umount
+
+  function fs.isReadOnly(file)
+    checkArg(1, file, "string", "nil")
+    local node, path = vfs.resolve(file or "/")
+    if not node then
+      return nil, path
+    end
+    return node:isReadOnly(path)
+  end
+
+  function fs.makeDirectory(path)
+    checkArg(1, path, "string")
+    local sdir, dend = path:match("(.+)/(.-)")
+    local node, dir = vfs.resolve(path)
+    if not node then
+      return nil, dir
+    end
+    return node:makeDirectory(dir.."/"..dend)
+  end
+
+  function fs.remove(file)
+    checkArg(1, path, "string")
+    local node, path = vfs.resolve(file)
+    if not node then
+      return nil, path
+    end
+    return node:remove(path)
+  end
 
   io.write("Done.\n")
 end
