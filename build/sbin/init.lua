@@ -73,6 +73,15 @@ do
     return node:remove(path)
   end
 
+  function fs.list(dir)
+    checkArg(1, dir, "string")
+    local node, path = vfs.resolve(dir)
+    if not node then
+      return nil, path
+    end
+    return node:list(path)
+  end
+
   io.write("Done.\n")
 end
 
