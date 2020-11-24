@@ -1,5 +1,5 @@
 CONFIG = {
-  version = "0.1.0",
+  version = os.getenv("INIT_VERSION") or "undefined",
   modules = {
   }
 }
