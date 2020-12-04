@@ -8,4 +8,5 @@ local log = k.io.dmesg
 --#include "src/package.lua"
 --#include "src/os.lua"
 --#include "tmp/mods.lua"
+--#include "src/scripts.lua"
 --#include "src/getty.lua"
