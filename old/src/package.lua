@@ -71,15 +71,6 @@ do
     return new
   end
 
-  function package.protect(tbl, name)
-    local new = setmetatable(tbl, {
-      __newindex = function() error((name or "lib") .. " is read-only") end,
-      __metatable = {}
-    })
-    blacklist[new] = true
-    return new
-  end
-
   function package.delay(lib, file)
     local mt = {
       __index = function(tbl, key)

@@ -1,4 +1,4 @@
-local _INFO = {
+_G._IINFO = {
   name    = "@[{CONFIG.name or 'Epitome'}]",
   version = "@[{CONFIG.version or 'undefined'}]",
 }

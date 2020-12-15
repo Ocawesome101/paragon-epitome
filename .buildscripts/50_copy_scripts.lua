@@ -1,2 +1,2 @@
-mkdir("build/etc/epitome/")
-cp("src/scripts", "build/etc/epitome/")
+mkdir("build/etc/")
+cp("src/rc.d", "build/etc/rc.d")

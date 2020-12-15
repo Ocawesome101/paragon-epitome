@@ -1,3 +1,4 @@
+#!/usr/bin/env lua
 -- Paragon build system --
 
 local getopt = require("lib.getopt")
