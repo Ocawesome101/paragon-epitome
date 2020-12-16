@@ -1,2 +1,2 @@
 mkdir("build/etc/")
-cp("src/rc.d", "build/etc/rc.d")
+cp("src/etc/*", "build/etc/")
