@@ -5,7 +5,7 @@ local bgpu, bscr
 if k.io.gpu then
   local gpu = k.io.gpu
   bgpu, bscr = gpu.address, gpu.getScreen()
-  local vts = k.vt.new(component.proxy(gpu.address))
+  local vts = k.vt.new(require("component").proxy(gpu.address))
   io.input(vts)
   io.output(vts)
   k.sched.getinfo():stderr(vts)

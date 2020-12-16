@@ -1,3 +1,53 @@
+--[[
+        Epitome init system.  SysV-style.
+        Copyright (C) 2020 Ocawesome101
+        This program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <https://www.gnu.org/licenses/>.
+]]
+
+local k = ...
+local log = k.io.dmesg
+local _INFO = {
+  name    = "Epitome",
+  version = "0.3.0",
+}
+
+-- init logger --
+
+log("INIT: src/logger.lua")
+local bgpu, bscr
+if k.io.gpu then
+  local gpu = k.io.gpu
+  bgpu, bscr = gpu.address, gpu.getScreen()
+  local vts = k.vt.new(require("component").proxy(gpu.address))
+  io.input(vts)
+  io.output(vts)
+  k.sched.getinfo():stderr(vts)
+  vts:write("\27[2J\27[1;1H")
+  function log(col, msg)
+    if type(col) == "string" then
+      msg = col
+      col = 32
+    end
+    return io.write(string.format("\27[%dm* \27[97m%s\n", col + 60, msg))
+  end
+  k.io.hide()
+end
+
+log(34, string.format("Welcome to \27[92m%s \27[97mversion \27[94m%s\27[97m", _INFO.name, _INFO.version))
+
+-- services --
+
+
+
 -- run levels
 
 do
@@ -5,7 +55,7 @@ do
   local computer = require("computer")
   local component = require("component")
   log(34, "Bringing up run level support")
-  local _DEFAULT = @[{CONFIG.runlevel or 3}]
+  local _DEFAULT = 3
   --[[ Here's how run levels work under Epitome:
        
         - /etc/rc.d contains 7 subdirectories - one per runlevel.
@@ -75,3 +125,20 @@ do
     return runlevel
   end
 end
+
+-- load getty --
+
+log("src/getty.lua")
+
+log("Starting getty")
+local ok, err = loadfile("/sbin/getty.lua")
+
+if not ok then
+  log(31, "failed: ".. err)
+else
+  require("process").spawn(function()local s, r = pcall(ok, bgpu, bscr) if not s and r then log(31, "failed: "..r) end end, "[getty]")
+end
+
+require("event").push("init")
+while true do coroutine.yield() end
+

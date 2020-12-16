@@ -13,8 +13,10 @@
         along with this program.  If not, see <https://www.gnu.org/licenses/>.
 ]]
 
+local k = ...
 local log = k.io.dmesg
 --#include "src/info.lua"
 --#include "src/logger.lua"
+--#include "src/services.lua"
 --#include "src/runlevels.lua"
 --#include "src/getty.lua"
