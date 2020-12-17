@@ -44,9 +44,10 @@ do
     for i=1, #files, 1 do
       if files[i]:sub(1,1) ~= "." then
         log(34, base .. files[i])
-        local ok, err = pcall(dofile, base .. files[i])
+        local ok, err = pcall(dofile, base .. files[i], log)
         if not ok and err then
           log(31, "ERROR: " .. tostring(err))
+          os.sleep(5)
         end
       end
     end

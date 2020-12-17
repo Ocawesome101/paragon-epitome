@@ -9,7 +9,7 @@ if k.io.gpu then
   io.input(vts)
   io.output(vts)
   k.sched.getinfo():stderr(vts)
-  vts:write("\27[2J\27[1;1H")
+  vts:write("\27[39;49m\27[2J\27[1;1H")
   function log(col, msg)
     if type(col) == "string" then
       msg = col

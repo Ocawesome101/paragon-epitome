@@ -36,5 +36,5 @@ do
     return table.copy(running)
   end
 
-  package.loaded.service = svc
+  package.loaded.svc = svc
 end
