@@ -202,7 +202,7 @@ end
 require("event").push("init")
 while true do
   local e = table.pack(coroutine.yield())
-  if e[1]=="process_died" then
+  if e[1]=="process_died" and e[4] then
     io.stderr:write(tostring(e[4]),"\n")
   end
 end
