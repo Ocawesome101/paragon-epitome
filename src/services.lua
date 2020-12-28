@@ -22,6 +22,7 @@ do
     end
     local pid = process.spawn(ok, "["..s.."]")
     running[s] = pid
+    return true
   end
 
   function svc.stop(s)
@@ -30,6 +31,7 @@ do
     end
     process.signal(running[s], process.signals.SIGTERM)
     running[s] = nil
+    return true
   end
   
   function svc.running()
