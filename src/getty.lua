@@ -11,6 +11,7 @@ do
 end
 
 log("Starting getty")
+local pids = {}
 do
   local pty = require("pty")
   local function start_getty(stdio)
@@ -31,15 +32,19 @@ do
             log(31, "failed: "..r)
           end
         end, "[getty]")
-        io.write("\nStarted getty as " .. tostring(pid))
      end
+     pids[#pids+1]=pid
   end
 
   for stream in pty.streams() do
-    io.write("Starting getty on: " .. tostring(stream), "\n")
     start_getty(stream)
   end
 end
 
 require("event").push("init")
-while true do coroutine.yield() end
+while true do
+  local e = table.pack(coroutine.yield())
+  if e[1]=="process_died" then
+    io.stderr:write(tostring(e[4]),"\n")
+  end
+end
