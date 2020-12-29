@@ -17,6 +17,7 @@ local k = ...
 local log = k.io.dmesg
 --#include "src/info.lua"
 --#include "src/logger.lua"
+--#include "src/signals.lua"
 --#include "src/services.lua"
 --#include "src/runlevels.lua"
 --#include "src/getty.lua"

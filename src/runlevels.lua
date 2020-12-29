@@ -76,4 +76,13 @@ do
     end
     return runlevel
   end
+
+  local sd = computer.shutdown
+  function computer.shutdown(r)
+    if require("users").user() ~= 0 then
+      return nil, "only root can do that"
+    end
+    computer.runlevel(0)
+    sd(r)
+  end
 end
