@@ -9,7 +9,7 @@ do
   local path = "/etc/services.d/"
 
   local function full(p)
-    return string.format("%s%s.lua", path, s)
+    return string.format("%s%s.lua", path, p)
   end
 
   function svc.start(s)
